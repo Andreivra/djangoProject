@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Delete Trainer {{ trainer }} {% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Delete {{ trainer }}</h3>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="card-body">
+                            <h5 class="text-center">Are you shore you want to delete the record?</h5>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-danger">YES</button>
+                            <a href="{% url 'list-of-trainers' %}" class="btn btn-primary">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

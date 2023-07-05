@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Details {{ trainer }} {% endblock %}
+
+{% block content %}
+    <br><br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h1>
+                            <strong>
+                                {{ trainer.first_name|title }} {{ trainer.last_name|title }}
+                            </strong>
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            {% if trainer.profile %}
+                                <div class="col-md-4 offset-md-4">
+                                    <img src="{{ trainer.profile.url }}" class="card-img-top img-thumbnail"
+                                         alt="Imagine Profil">
+                                </div>
+                            {% else %}
+                                <div class="col-md-4 offset-md-4">
+                                    <img src="{% static 'images/profile_pic.jpg' %}"
+                                         class="card-img-top img-thumbnail" alt="Imagine Profil">
+                                </div>
+                            {% endif %}
+                        <br><br><br>
+                        <strong>E-mail: </strong>{{ trainer.email }}<br/>
+                        <strong>Course: </strong>{{ trainer.course }}<br/>
+                        <strong>Department: </strong>{{ trainer.department }}<br/>
+                        <strong>Record ID: </strong>{{ trainer.id }}<br/>
+                        <br><br>
+                        <a href="{% url 'list-of-trainers' %}" class="btn btn-primary">Back</a>
+                        {% if perms.trainer.change_trainer %}
+                            <a href="{% url 'update-trainer' trainer.id %}" class="btn btn-secondary">Update</a>
+                        {% endif %}
+                        {% if perms.trainer.delete_trainer %}
+                            <a href="{% url 'delete-trainer' trainer.id %}" class="btn btn-danger">Delete</a>
+                        {% endif %}
+
+                    </div>
+                    <div class="card-footer text-center">
+                        Created at: {{ trainer.created_at|date:"d-m-Y H:i:s" }} / Last Update
+                        at: {{ trainer.updated_at|date:"d-m-Y H:i:s" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

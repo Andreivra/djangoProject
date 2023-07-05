@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} List of Trainers {% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <br><br>
+        <div class="row gy-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center"> Filters</h3>
+                    </div>
+                    <form method="get">
+                        <div class="card-body">
+                            {{ form_filters.as_p }}
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-outline-success">Search</button>
+                            <a href="{% url 'list-of-trainers' %}" class="btn btn-outline-secondary">Reset</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% if all_trainers %}
+                {% for trainer in all_trainers %}
+                    <div class="col-md-2">
+                        <div class="card">
+                            {% if trainer.profile %}
+                                <img src="{{ trainer.profile.url }}" class="card-img-top img-thumbnail"
+                                     alt="Imagine Profil">
+                            {% else %}
+                                <img src="{% static 'images/profile_pic.jpg' %}"
+                                     class="card-img-top img-thumbnail" alt="Imagine Profil">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ trainer.first_name|title }} {{ trainer.last_name|title }}</h5>
+                                <p class="card-text"><strong>Department:</strong> {{ trainer.department|upper }}</p>
+                                <p class="card-text">Course: {{ trainer.course|lower }}</p>
+                            </div>
+                            <div class="card-footer text-center">
+                                {% if perms.trainer.view_trainer or perms.trainer.change_trainer or perms.trainer.delete_trainer %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle align-center" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            More actions
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            {% if perms.trainer.view_trainer %}
+                                                <li><a class="dropdown-item"
+                                                       href="{% url 'trainer-details' trainer.id %}">Details</a></li>
+                                            {% endif %}
+                                            {% if perms.trainer.change_trainer %}
+                                                <li><a class="dropdown-item"
+                                                       href="{% url 'update-trainer' trainer.id %}">Update</a></li>
+                                            {% endif %}
+                                            {% if perms.trainer.delete_trainer %}
+                                                <li><a class="dropdown-item"
+                                                       href="{% url 'delete-trainer' trainer.id %}">Delete</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <a>No action</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h3 class="text-center"> Nu avem Traineri care sa indeplineasca criteriile de cautare introduse</h3>
+            {% endif %}
+        </div>
+        <br><br><br>
+    </div>
+{% endblock %}
